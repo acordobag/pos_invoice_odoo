@@ -38,6 +38,6 @@
           'report/report_invoice_date.xml'],
  'demo_xml': [],
  'test': [],
- 'installable': False,
+ 'installable': True,
  'active': False,
  }
