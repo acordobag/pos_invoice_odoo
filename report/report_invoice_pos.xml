@@ -1,272 +1,276 @@
 <?xml version="1.0"?>
-<record id="paperformat_frenchcheck" model="report.paperformat">
-    <field name="name">POS</field>
-    <field name="default" eval="True"/>
-    <field name="format">custom</field>
-    <field name="page_height">76</field>
-    <field name="page_width">270</field>
-    <field name="orientation">Portrait</field>
-    <field name="margin_top">15</field>
-    <field name="margin_bottom">1</field>
-    <field name="margin_left">3</field>
-    <field name="margin_right">2</field>
-    <field name="header_line" eval="False"/>
-    <field name="header_spacing">1</field>
-    <field name="dpi">80</field>
-</record>
-<report id="report_invoice_pos" model="account.invoice" string="Facturas POS" report_type="qweb-pdf" name="pos_invoice_qweb.report_invoice_pos" file="pos_invoice_qweb.report_invoice_pos" />
-<template id="pos_invoice_qweb.report_invoice_pos">
-    <t t-call="report.html_container">
-        <t t-foreach="doc_ids" t-as="doc_id">
-            <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'pos_invoice_qweb.report_invoice_pos_document')"/></t>
-    </t>
-</template>
-<template id="pos_invoice_qweb.report_invoice_pos_document">
-    <t t-name="pos_invoice_qweb.report_invoice_pos_document">
-        <div class="page" style="font-family: courier; font-size:12.0px">
-            <div class="text-center">
-                <div>
-                    <t t-esc="o.company_id.company_registry"/>
-                </div>
-                <t t-if="o.company_id.vat">
-                    <div>Céd.Jurídica:                                             
-                        <t t-esc="o.company_id.vat"/>
+<openerp>
+    <data>
+        <record id="paperformat_frenchcheck" model="report.paperformat">
+            <field name="name">POS</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">76</field>
+            <field name="page_width">270</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">15</field>
+            <field name="margin_bottom">1</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">1</field>
+            <field name="dpi">80</field>
+        </record>
+        <report id="report_invoice_pos" model="account.invoice" string="Facturas POS" report_type="qweb-pdf" name="pos_invoice_qweb.report_invoice_pos" file="pos_invoice_qweb.report_invoice_pos" />
+        <template id="pos_invoice_qweb.report_invoice_pos">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'pos_invoice_qweb.report_invoice_pos_document')"/></t>
+            </t>
+        </template>
+        <template id="pos_invoice_qweb.report_invoice_pos_document">
+            <t t-name="pos_invoice_qweb.report_invoice_pos_document">
+                <div class="page" style="font-family: courier; font-size:12.0px">
+                    <div class="text-center">
+                        <div>
+                            <t t-esc="o.company_id.company_registry"/>
+                        </div>
+                        <t t-if="o.company_id.vat">
+                            <div>Céd.Jurídica:                                                                     
+                                <t t-esc="o.company_id.vat"/>
+                            </div>
+                        </t>
+                        <t t-if="o.company_id.street">
+                            <div>
+                                <t t-esc="o.company_id.street"/>
+                            </div>
+                        </t>
+                        <t t-if="o.company_id.phone">
+                            <div>Teléfono:                                                                     
+                                <t t-esc="o.company_id.phone"/>
+                            </div>
+                        </t>
+                        <t t-if="o.company_id.website">
+                            <div>Web:                                                                     
+                                <t t-esc="o.company_id.website"/>
+                            </div>
+                        </t>
+                        <br/>
                     </div>
-                </t>
-                <t t-if="o.company_id.street">
                     <div>
-                        <t t-esc="o.company_id.street"/>
-                    </div>
-                </t>
-                <t t-if="o.company_id.phone">
-                    <div>Teléfono:                                             
-                        <t t-esc="o.company_id.phone"/>
-                    </div>
-                </t>
-                <t t-if="o.company_id.website">
-                    <div>Web:                                             
-                        <t t-esc="o.company_id.website"/>
-                    </div>
-                </t>
-                <br/>
-            </div>
-            <div>
-                <table style="WIDTH:100%">
-                    <tr>
-                        <td style="WIDTH:30%">Factura:</td>
-                        <td style="WIDTH:70%">
-                            <t t-esc="o.number"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="WIDTH:30%">Orden No.:</td>
-                        <td style="WIDTH:70%">
-                            <t t-esc="o.origin"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="WIDTH:30%">Fecha:</td>
-                        <td style="WIDTH:70%">
-                            <t t-esc="o.date_invoice and (o.date_invoice[8:10] + '-' + o.date_invoice[5:7] + '-' + o.date_invoice[0:4]) or ''"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="WIDTH:30%">Plazo:</td>
-                        <td style="WIDTH:70%">
-                            <t t-esc="o.payment_term.name"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="WIDTH:30%">Vencimiento:</td>
-                        <td style="WIDTH:70%">
-                            <t t-esc="o.date_due"/>
-                        </td>
-                    </tr>
-                    <t t-if="o.user_id">
-                        <tr>
-                            <td style="WIDTH:30%">Vendedor:                                                             
-                                <br/>
-                            </td>
-                            <td style="WIDTH:70%">
-                                <t t-esc="o.user_id.name"/>
-                            </td>
-                        </tr>
-                    </t>
-                    <t t-if="o.name">
-                        <tr>
-                            <td style="WIDTH:30%">OC:</td>
-                            <td style="WIDTH:70%">
-                                <strong>
-                                    <t t-esc="o.name"/>
-                                </strong>
-                            </td>
-                        </tr>
-                    </t>
-                    <t t-if="o.partner_id">
-                        <tr>
-                            <td style="WIDTH:30%">Cliente:</td>
-                            <td style="WIDTH:70%">
-                                <strong>
-                                    <t t-esc="o.partner_id.name"/>
-                                </strong>
-                            </td>
-                        </tr>
-                        <t t-if="o.partner_id.ref">
+                        <table style="WIDTH:100%">
                             <tr>
-                                <td style="WIDTH:30%">Cédula: </td>
+                                <td style="WIDTH:30%">Factura:</td>
                                 <td style="WIDTH:70%">
-                                    <t t-esc="o.partner_id.ref"/>
+                                    <t t-esc="o.number"/>
                                 </td>
                             </tr>
-                        </t>
-                        <t t-if="o.partner_id.street">
                             <tr>
-                                <td style="WIDTH:30%">Direccion: </td>
+                                <td style="WIDTH:30%">Orden No.:</td>
                                 <td style="WIDTH:70%">
-                                    <t t-esc="o.partner_id.street"/>
+                                    <t t-esc="o.origin"/>
                                 </td>
                             </tr>
-                        </t>
-                        <t t-if="o.partner_id.phone">
                             <tr>
-                                <td style="WIDTH:30%">Telefono:</td>
+                                <td style="WIDTH:30%">Fecha:</td>
                                 <td style="WIDTH:70%">
-                                    <t t-esc="o.partner_id.phone"/>
+                                    <t t-esc="o.date_invoice and (o.date_invoice[8:10] + '-' + o.date_invoice[5:7] + '-' + o.date_invoice[0:4]) or ''"/>
                                 </td>
                             </tr>
-                        </t>
-                    </t>
-                </table>
-                <br/>
-            </div>
-            <table class="table table-condensed">
-                <tbody>
-                    <tr>
-                        <td style="width: 25%">
+                            <tr>
+                                <td style="WIDTH:30%">Plazo:</td>
+                                <td style="WIDTH:70%">
+                                    <t t-esc="o.payment_term.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="WIDTH:30%">Vencimiento:</td>
+                                <td style="WIDTH:70%">
+                                    <t t-esc="o.date_due"/>
+                                </td>
+                            </tr>
+                            <t t-if="o.user_id">
+                                <tr>
+                                    <td style="WIDTH:30%">Vendedor:                                                                                             
+                                        <br/>
+                                    </td>
+                                    <td style="WIDTH:70%">
+                                        <t t-esc="o.user_id.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="o.name">
+                                <tr>
+                                    <td style="WIDTH:30%">OC:</td>
+                                    <td style="WIDTH:70%">
+                                        <strong>
+                                            <t t-esc="o.name"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="o.partner_id">
+                                <tr>
+                                    <td style="WIDTH:30%">Cliente:</td>
+                                    <td style="WIDTH:70%">
+                                        <strong>
+                                            <t t-esc="o.partner_id.name"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <t t-if="o.partner_id.ref">
+                                    <tr>
+                                        <td style="WIDTH:30%">Cédula: </td>
+                                        <td style="WIDTH:70%">
+                                            <t t-esc="o.partner_id.ref"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="o.partner_id.street">
+                                    <tr>
+                                        <td style="WIDTH:30%">Direccion: </td>
+                                        <td style="WIDTH:70%">
+                                            <t t-esc="o.partner_id.street"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="o.partner_id.phone">
+                                    <tr>
+                                        <td style="WIDTH:30%">Telefono:</td>
+                                        <td style="WIDTH:70%">
+                                            <t t-esc="o.partner_id.phone"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+                        <br/>
+                    </div>
+                    <table class="table table-condensed">
+                        <tbody>
+                            <tr>
+                                <td style="width: 25%">
                     CANT
                 </td>
-                        <td style="width: 35%">
+                                <td style="width: 35%">
                     PRECIO
                 </td>
-                        <td style="width: 40%" class="text-right">
+                                <td style="width: 40%" class="text-right">
                     TOTAL
                 </td>
-                    </tr>
-                    <t t-foreach="o.invoice_line" t-as="line">
-                        <tr>
-                            <td>
-                                <span t-esc="'%.f' % line.quantity"/>
-                            </td>
-                            <td>
-                                <span t-field="line.price_unit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                            </td>
-                            <td class="text-right">
-                                <span t-field="line.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                                <t t-esc="line.name"/>
-                            </td>
-                        </tr>
-                    </t>
-                </tbody>
-            </table>
-            <div>
-                <t t-esc="o.comment"/>
-            </div>
-            <div class="row">
-                <div class="col-xs-8 pull-right">
-                    <table class="table table-condensed">
-                        <tr class="border-black">
-                            <td>
-                                <strong>Subtotal</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                            </td>
-                        </tr>
-                        <tr class="border-black">
-                            <td>
-                                <strong>I.V.</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                            </td>
-                        </tr>
-                        <tr class="border-black">
-                            <td>
-                                <strong>Descuento</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-field="o.currency_id.symbol" />
-                                <t t-esc="'{0:,.2f}'.format(int(sum([ (line.quantity*line.price_unit-line.price_subtotal) for line in o.invoice_line ])))" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:14.0px">
-                                <strong>Total</strong>
-                            </td>
-                            <td class="text-right" style="font-size:14.0px">
-                                <strong>
-                                    <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                </strong>
-                            </td>
-                        </tr>
+                            </tr>
+                            <t t-foreach="o.invoice_line" t-as="line">
+                                <tr>
+                                    <td>
+                                        <span t-esc="'%.f' % line.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.price_unit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="line.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <t t-esc="line.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
                     </table>
-                </div>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <div class="text-center">______________________________
-                            
-                <br/>
+                    <div>
+                        <t t-esc="o.comment"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 pull-right">
+                            <table class="table table-condensed">
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Subtotal</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>I.V.</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Descuento</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.currency_id.symbol" />
+                                        <t t-esc="'{0:,.2f}'.format(int(sum([ (line.quantity*line.price_unit-line.price_subtotal) for line in o.invoice_line ])))" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:14.0px">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right" style="font-size:14.0px">
+                                        <strong>
+                                            <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="text-center">______________________________
+                                            
+                        <br/>
                              Recibido Conforme
-                            
-                <br/>
-                <br/>
-CUENTA BANCARIA
+                                            
+                        <br/>
+                        <br/>
+                CUENTA BANCARIA
 
-                                                        
-                <br/>
-BAC SAN JOSE  
+                                                                        
+                        <br/>
+                BAC SAN JOSE  
 
-                                                        
-                <br/>
-CUENTA 929635399 
+                                                                        
+                        <br/>
+                CUENTA 929635399 
 
-                                                        
-                <br/>
-CUENTA CLIENTE 10200009296353994
+                                                                        
+                        <br/>
+                CUENTA CLIENTE 10200009296353994
 
-                                                        
-                <br/>
-                <br/>
-                <br/>
+                                                                        
+                        <br/>
+                        <br/>
+                        <br/>
 
-NO SE ACEPTAN DEVOLUCIONES DE MERCADERIA DESPUES DE 24 HORAS DE ENTREGADA.  ESTA VIAJA POR CUENTA Y RIESGO DEL COMPRADOR                             
-                <br/>
-                <br/>
-O R I G I N A L - C L I E N T E
-                            
-                <br/>
-Fecha Impresion:
-                            
-                <t t-usertime="" />
-                <br/>
-                <br/>
-MAS INFO EN NUESTRA PAGINA WEB:
+                NO SE ACEPTAN DEVOLUCIONES DE MERCADERIA DESPUES DE 24 HORAS DE ENTREGADA.  ESTA VIAJA POR CUENTA Y RIESGO DEL COMPRADOR                                             
+                        <br/>
+                        <br/>
+                O R I G I N A L - C L I E N T E
+                                            
+                        <br/>
+                Fecha Impresion:
+                                            
+                        <t t-usertime="" />
+                        <br/>
+                        <br/>
+                MAS INFO EN NUESTRA PAGINA WEB:
 
-                            
-                <img t-att-src="'report/barcode/QR/%s' % 'www.ortomedicacr.com'" width="90" height="90" />
-                <br/>
-                <br/>
-Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
-                        
-            </div>
-        </div>
-    </t>
-</template>
+                                            
+                        <img t-att-src="'report/barcode/QR/%s' % 'www.ortomedicacr.com'" width="90" height="90" />
+                        <br/>
+                        <br/>
+                Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
+                                    
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</openerp>
