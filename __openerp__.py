@@ -33,7 +33,7 @@
  'author': "Adrian Cordoba",
  'website': 'http://www.camptocamp.com',
  'license': 'AGPL-3',
- 'depends': ['base', 'report_webkit', 'base_headers_webkit', 'account'],
+ 'depends': ['base', 'account'],
  'data': ['report/report_invoice_pos.xml',
           'report/report_invoice_date.xml'],
  'demo_xml': [],
