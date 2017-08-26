@@ -9,7 +9,6 @@
             </t>
         </template>
         <template id="pos_invoice_qweb.report_date_pos_document">
-            <?xml version="1.0"?>
             <t t-name="pos_invoice_qweb.report_date_pos_document">
                 <div class="page" style="font-family: courier; font-size:12.0px">
                     <div class="text-center">
