@@ -7,7 +7,6 @@
             <field name="inherit_id" ref="account.invoice_form_inherited"/>
             <field name="arch" type="xml">
                 <field name="fiscal_position" position="after">
-                    <field name="date_day"/>
                     <field name="ccss_ref"/>
                 </field>
             </field>
