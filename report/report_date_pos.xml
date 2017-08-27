@@ -2,6 +2,9 @@
 <openerp>
     <data>
         <report id="report_date_qweb_pos" model="account.invoice" string="Comprobante Cita" report_type="qweb-pdf" name="pos_invoice_qweb.report_date_pos" file="pos_invoice_qweb.report_date_pos" />
+        <record id="report_date_qweb_pos" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_frenchcheck"/>
+        </record>
         <template id="pos_invoice_qweb.report_date_pos">
             <t t-call="report.html_container">
                 <t t-foreach="doc_ids" t-as="doc_id">
@@ -16,7 +19,7 @@
                             <t t-esc="o.company_id.company_registry"/>
                         </div>
                         <t t-if="o.company_id.vat">
-                            <div>Céd.Jurídica:                                                                                                                                                         
+                            <div>Céd.Jurídica:                                                                                                                                                                                         
                                 <t t-esc="o.company_id.vat"/>
                             </div>
                         </t>
@@ -26,12 +29,12 @@
                             </div>
                         </t>
                         <t t-if="o.company_id.phone">
-                            <div>Teléfono:                                                                                                                                                         
+                            <div>Teléfono:                                                                                                                                                                                         
                                 <t t-esc="o.company_id.phone"/>
                             </div>
                         </t>
                         <t t-if="o.company_id.website">
-                            <div>Web:                                                                                                                                                         
+                            <div>Web:                                                                                                                                                                                         
                                 <t t-esc="o.company_id.website"/>
                             </div>
                         </t>
@@ -40,9 +43,9 @@
                     <div>
                         <table style="WIDTH:100%">
                             <tr>
-                                <td style="WIDTH:30%">Receta:</td>
+                                <td style="WIDTH:30%">Num. Receta:</td>
                                 <td style="WIDTH:70%">
-                                    <t t-esc="o.number"/>
+                                    <t t-esc="o.ccss_ref"/>
                                 </td>
                             </tr>
                             <t t-if="o.partner_id">
@@ -72,9 +75,9 @@
                                 </t>
                             </t>
                             <tr>
-                                <td style="WIDTH:30%">Fecha:</td>
-                                <td style="WIDTH:70%">
-                                    <t t-esc="o.date_invoice and (o.date_invoice[8:10] + '-' + o.date_invoice[5:7] + '-' + o.date_invoice[0:4]) or ''"/>
+                                <td style="WIDTH:30%">Fecha de cita:</td>
+                                <td style="WIDTH:70%; color:red;">
+                                    <t t-esc="o.date_day and (o.date_day[8:10] + '-' + o.date_day[5:7] + '-' + o.date_day[0:4]) or ''"/>
                                 </td>
                             </tr>
                         </table>
@@ -163,47 +166,45 @@
                     <br/>
                     <br/>
                     <div class="text-center">______________________________
-                                                                                                
+                                                                                                                        
                         <br/>
                              Recibido Conforme
-                                                                                                
+                                                                                                                        
                         <br/>
                         <br/>
 
 CUENTA BANCARIA
 
-                                                                            
+                                                                                                    
                         <br/>
 BAC SAN JOSE  
 
-                                                                            
+                                                                                                    
                         <br/>
 CUENTA 929635399 
 
-                                                                            
+                                                                                                    
                         <br/>
 CUENTA CLIENTE 10200009296353994
 
-                                                                            
+                                                                                                    
                         <br/>
                         <br/>
                         <br/>
-
-
-TRAER ROPA INTERIOR EXTRA Y PAÑO PARA LA TOMA DEL MOLDE                                                                                                
+                        <span style="color:red">TRAER ROPA INTERIOR EXTRA Y PAÑO PARA LA TOMA DEL MOLDE</span>
                         <br/>
                         <br/>
 O R I G I N A L - C L I E N T E
-                                                                                                
+                                                                                                                        
                         <br/>
                         <br/>
 MAS INFO EN NUESTRA PAGINA WEB:
-                                                                                                
+                                                                                                                        
                         <img t-att-src="'report/barcode/QR/%s' % 'www.ortomedicacr.com'" width="90" height="90" />
                         <br/>
                         <br/>
 Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
-                                                                        
+                                                                                            
                     </div>
                 </div>
             </t>

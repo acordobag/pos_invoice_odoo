@@ -23,10 +23,7 @@
  'version': '1.1.4',
  'category': 'Reports/Webkit',
  'description': """
-     Replaces the legacy rml Invoice report by a brand new webkit report.
-
- **Warning:** If you are installing manually this module, it requires the
- module *base_headers_webkit*, available on:
+Modulo de reporte de factura para pos, mas un comprobante adicional.
 
  https://launchpad.net/webkit-utils
  """,
@@ -34,8 +31,9 @@
  'website': 'http://www.camptocamp.com',
  'license': 'AGPL-3',
  'depends': ['base', 'account'],
- 'data': ['report/report_invoice_pos.xml',
-            'report/report_date_pos.xml'],
+ 'data': ['views/account_invoice_inherited.xml',
+        'report/report_invoice_pos.xml',
+        'report/report_date_pos.xml'],
  'demo_xml': [],
  'test': [],
  'installable': True,

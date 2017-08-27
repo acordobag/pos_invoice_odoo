@@ -19,5 +19,4 @@
 #
 ##############################################################################
 
-
-export . from models
+export . from account_invoice_inherited
