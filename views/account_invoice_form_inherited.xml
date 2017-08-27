@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <field name="fiscal_position" position="after">
                     <field name="ccss_ref"/>
+                    <field name="date_day"/>
                 </field>
             </field>
         </record>
