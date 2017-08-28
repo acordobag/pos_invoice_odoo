@@ -77,7 +77,7 @@
                             <tr>
                                 <td style="WIDTH:30%">Fecha cita:</td>
                                 <td style="WIDTH:70%; color:red;">
-                                    <t t-esc="o.date_day"/>
+                                    <t t-esc="datetime.datetime.strptime(o.date_day, '%Y-%m-%d %H:%M:%S').strftime('%b %d,%Y %H:%M %p')"/>
                                 </td>
                             </tr>
                         </table>
