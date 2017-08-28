@@ -92,7 +92,7 @@
                             </tr>
                             <t t-if="o.ccss_ref">
                                 <tr>
-                                    <td style="WIDTH:30%">Num. receta:</td>
+                                    <td style="WIDTH:30%">Receta:</td>
                                     <td style="WIDTH:70%">
                                         <strong>
                                             <t t-esc="o.ccss_ref"/>
