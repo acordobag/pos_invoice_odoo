@@ -35,7 +35,5 @@ Modulo de reporte de factura para pos, mas un comprobante adicional.
         'report/report_invoice_pos.xml',
         'report/report_date_pos.xml'],
  'demo_xml': [],
- 'test': [],
- 'installable': True,
- 'active': False,
+ 'test': []
  }
