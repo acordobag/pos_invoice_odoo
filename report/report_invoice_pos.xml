@@ -251,10 +251,6 @@
                 O R I G I N A L - C L I E N T E
                                                                     
                         <br/>
-                Fecha Impresion:
-                                                                    
-                        <t t-usertime="" />
-                        <br/>
                         <br/>
                 MAS INFO EN NUESTRA PAGINA WEB:
 
