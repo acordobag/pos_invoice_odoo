@@ -84,7 +84,7 @@
                                     <t t-esc="o.payment_term.name"/>
                                 </td>
                             </tr>
-                            <tr t-if="o.date_due">
+                            <tr t-if="o.payment_term==1">
                                 <td style="WIDTH:30%">Vencimiento:</td>
                                 <td style="WIDTH:70%">
                                     <t t-esc="o.date_due and (o.date_due[8:10] + '-' + o.date_due[5:7] + '-' + o.date_due[0:4]) or ''"/>
