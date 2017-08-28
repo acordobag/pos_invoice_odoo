@@ -75,7 +75,7 @@
                                 </t>
                             </t>
                             <tr>
-                                <td style="WIDTH:30%">Fecha de cita:</td>
+                                <td style="WIDTH:30%">Fecha cita:</td>
                                 <td style="WIDTH:70%; color:red;">
                                     <t t-esc="o.date_day and (o.date_day[8:10] + '-' + o.date_day[5:7] + '-' + o.date_day[0:4]) or ''"/>
                                 </td>
