@@ -7,8 +7,8 @@
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
                 <field name="fiscal_position" position="after">
-                    <field name="ccss_ref"/>
-                    <field name="date_day"/>
+                    <field name="ccss_ref" required="1"/>
+                    <field name="date_day" required="1"/>
                 </field>
             </field>
         </record>
