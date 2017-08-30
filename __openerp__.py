@@ -33,6 +33,7 @@ Modulo de reporte de factura para pos, mas un comprobante adicional.
  'depends': ['base', 'account'],
  'data': [
         'views/account_invoice_form_inherited.xml',
+        'views/res_partner_form_inherited.xml',
         'report/report_invoice_pos.xml',
         'report/report_date_pos.xml'],
  'demo_xml': [],
