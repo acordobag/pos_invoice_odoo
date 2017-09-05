@@ -262,18 +262,13 @@
                 </div>
                 <!--End tbl-wrapped-->
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-xs-8">
                         <p style="font-family:Helvetica;padding:2px 2px 2px 2px;font-weight:bolder;font-size:9px!important">AUTORIZADO MEDIANTE OFICIO No.01-0068-97 DEL 26-09-97 DE LA D.G.T.D. </p>
                     </div>
                     <div class="col-xs-4">
                         <p style="font-family:Helvetica;padding:2px;font-weight:400;font-size:11px!important;color:#000000">
                             <span style="color:#FF0000">•ORIGINAL CLIENTE</span>   CONTABILIDAD   ARCHIVO
                         </p>
-                    </div>
-                    <div class="col-xs-3 mt0">
-                        <h4 style="float:right;color:#FF0000;font-weight:bolder; padding-right:5px;margin-top:0px">No. 
-                            <span t-esc="o.number or ''"/>
-                        </h4>
                     </div>
                 </div>
                 <div class="boxsq1">
