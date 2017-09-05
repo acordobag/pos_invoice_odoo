@@ -1,0 +1,1096 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <report id="report_invoice_qweb_full_page" 
+                model="account.invoice" 
+                string="Factura Carta" 
+                report_type="qweb-pdf" 
+                name="pos_invoice_qweb.report_invoice_full_page" 
+        file="pos_invoice_qweb.report_invoice_full_page" />
+        <template id="pos_invoice_qweb.report_invoice_full_page">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'pos_invoice_qweb.report_invoice_full_page_document')"/></t>
+            </t>
+        </template>
+        <template id="pos_invoice_qweb.report_invoice_full_page_document">
+        
+    <div class="header">
+        <table style="width:100%" class="mt32 mb35 table-condensed">
+          <tr>
+            <td width="80%">
+              <img  t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height:95px;"/>               
+            </td>
+            <td width="20%">
+              <div class="text-left">
+                  <h2><span style="color:#000;font-weight:bolder;font-size:22px" t-if="o.amount_total &gt;= 0 and not o.type == 'out_refund'">FACTURA</span>
+                    <span style="color:#FF0000;font-weight:bolder;font-size:20px" t-if="o.amount_total &lt; 0 or o.type == 'out_refund'">NOTA CRÉDITO</span><br/>
+                    <span style="color:#FF0000;font-weight:bolder;font-size:20px">No. <span style="color:red;" t-esc="o.number or '00001'"/></span>
+                  </h2>
+              </div>
+            </td>
+          </tr>
+        </table>
+    </div><!---//end header-->
+    <div class="page" style="height:190mm;width:100%"> 
+
+        <table style="width:100%;" class="mt35 mb30 table-condensed">
+          <tr>
+            <td width="80%">
+                <span class="title"><t t-esc="o.company_id.company_registry"/></span><br/>  
+                Cédula Jurídica <t t-esc="o.company_id.vat"/><br/>
+                <t t-if="o.company_id.street2" t-esc="o.company_id.street2"/><br/>
+                <span>Tel.</span> <t t-esc="o.company_id.phone"/> <span>Fax.</span> <t t-esc="o.company_id.fax"/><br/>
+                <span>Email:</span> <t t-esc="o.company_id.email"/><br/>
+                <t t-esc="o.company_id.website"/><br/><br/>                   
+            </td>
+            <td width="20%">
+              <div class="text-center">
+                <table style="width:90%;" class="dtheader rounded2">
+                  <tr>
+                    <td class="text-center">DÍA</td>
+                    <td class="text-center">MES</td>
+                    <td class="text-center">AÑO</td>
+                  </tr>
+                  <tr>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[8:10]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[5:7]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[0:4]) or ''"/></td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <table style="width:100%" class="mt30 mb30 table-condensed">
+          <tr >
+            <td width="80%">
+                <div t-if="o.partner_id.name" class="rcorners2">
+                    <table>
+                    <td width="60%">
+                    <strong>CLIENTE..:</strong> <span t-field="o.partner_id.name"/><br/>
+                    <strong>DIRECCIÓN:</strong> <span t-field="o.partner_id.street"/>
+                    </td>
+                    <td>
+                    <strong>TELÉFONO:</strong> <span t-field="o.partner_id.phone"/>
+                    </td>
+                    </table> 
+                </div>
+            </td>
+            <td width="20%">
+                <div t-if="o.partner_id.ref" class="rcorners2">
+                    <div class="text-center">
+                      <strong>CÓDIGO CLIENTE</strong><br/>
+                      <span t-field="o.partner_id.ref"/>
+                    </div>
+                </div>
+            </td>
+          </tr>
+        </table>
+        <table style="width:100%" class="mt30 mb30 table-condensed">
+          <tr>
+            <td>
+              <div t-if="o.origin" class="rcorners2">
+                <div class="text-center">
+                  <t  t-if="o.name"><strong>ORDEN DE COMPRA:</strong> <span t-field="o.name"/></t>     <t   t-if="o.origin"><strong>#PEDIDO:</strong> <span t-field="o.origin"/></t>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div t-if="o.user_id.name" class="rcorners2">
+                  <div class="text-center">
+                    <strong>VENDEDOR:</strong> <span t-field="o.user_id.name"/>
+                  </div>
+              </div>
+            </td>
+            <td colspan="2">
+              <div t-if="o.payment_term" class="rcorners2">
+                  <div class="text-center">
+                    <strong>CONDICIONES DE PAGO:</strong> <span t-esc="o.payment_term and o.payment_term.name or 'CONTADO'"/>
+                  </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="tble-wrapper">
+          <div class="content mt10 bg-img">
+            <table cellspacing="0" style="height:65%;width:100%;" class="tble">
+              <thead class="tble-header">
+                <tr>
+                  <th style="width:12%;" class="tble-header text-center">COD.ART.</th>
+                  <th style="width:8%" class="tble-header text-center">CANT.</th>
+                  <th style="width:5%" class="tble-header text-center">U.D.M</th>
+                  <th style="width:40%" class="tble-header text-center">DESCRIPCION</th>
+                  <th style="width:5%" class="tble-header text-center">%DESC.</th>
+                  <th style="width:12%" class="tble-header text-center">PREC.UNIT.</th>
+                  <th style="width:15%" class="tble-header text-center">SUBTOTAL</th>
+                  <th style="width:3%" class="tble-header text-center">I.V.</th>
+                </tr>
+              </thead>
+              <tbody class="invoice_tbody">
+                <tr class="tble-row" t-foreach="o.invoice_line" t-as="l">
+                  <td style="width:12%" class="text-center"><span t-field="l.product_id.default_code"/></td>
+                  <td style="width:8%" class="text-center"><span t-field="l.quantity"/></td>
+                  <td style="width:5%" class="text-center"><span t-field="l.uos_id.name"/></td>
+                  <td style="width:40%" class="text-left"><span t-field="l.name"/></td>
+                  <td style="width:5%" class="text-right"><span t-field="l.discount"/></td>
+                  <td style="width:12%" class="text-right"><span t-field="l.price_unit"/></td>
+                  <td style="width:12%" class="text-right"><span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                  <td style="width:2%" class="br text-center"><span t-if="l.invoice_line_tax_id">S</span></td>
+                </tr>
+                <tr class="bl br bt">
+                  <td colspan="8" class="text-center">
+                   ********** Ultima Línea **********
+                  </td>
+                </tr>
+                <t t-if="o.comment" class="text-center" style="font-size:10.0px">
+                <tr class="bl br">
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td colspan="2" class="tr-cls text-left">
+                    NOTAS:<span t-field="o.comment"/>
+                  </td>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                </tr>
+                </t>
+                <tr class="bl br">
+                  <td colspan="8"/>
+                </tr>
+              </tbody>
+            </table>          
+          </div>
+          <!--Tabla Totales-->
+          <table width="100%;" class="tble boxsq" cellpadding="0" cellspacing="0">
+            <tbody >
+              <tr>
+                <th style="width:28%" class="text-left">
+                  <p style="font-family:Helvetica;padding:2px;font-weight:bolder;font-size:9px!important;text-align:justify;">PRECIOS FACTURADOS Y PAGADEROS EN LA MISMA MONEDA. ESTA FACTURA DEVENGARA INTERESES DEL 3% MENSUAL DESPUES DE VENCIDA, EL DEUDOR REUNCIA SU DOMICILIO Y LOS REQUERIMIENTOS DE PAGO Y TRAMITES DE JUCIO Y DA POR ACEPTADAS LAS CONDICIONES DEL CODIGO DE COMERCIO SEGUN EL ARTICULO 460. NO SE ACEPTAN DEVOLUCIONES DESPUES DE 24 HORAS DE ENTREGADO.
+                  </p>
+                </th>
+                <th style="width:40%" class="bl text-left">
+                  <div style="padding:2px 2px;">
+                      <p><br/>Nombre:_____________________________.<br/><br/>
+                        No.Cédula:__________________________.<br/><br/>
+                        Firma:__________________________.</p> 
+                  </div>
+                </th>
+                <th style="width:15%" class="bl text-right">
+                  <div style="padding:2px 2px;">
+                    <span>SUBTOTAL</span><br/>
+                    <span>I.V.</span><br/>
+                    <span>DESCUENTO</span><br/>
+                    <span><strong>T O T A L</strong></span>
+                  </div>
+                </th>
+                <th style="width:15%" class="text-right">
+                  <div style="padding:2px 0px;">
+                            <span t-field="o.amount_untaxed_not_discounted" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/><br/>
+                            <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/><br/>
+                            <span t-field="o.currency_id.symbol" /><t t-esc="'{0:,.2f}'.format(int(sum([ (line.quantity*line.price_unit-line.price_subtotal) for line in o.invoice_line ])))" /><br/>
+                            <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                  </div>
+                </th>
+                <th style="width:2%" class="text-center"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--End tbl-wrapped-->
+        <div class="row">
+          <div class="col-xs-5"><p style="font-family:Helvetica;padding:2px 2px 2px 2px;font-weight:bolder;font-size:9px!important">AUTORIZADO MEDIANTE OFICIO No.01-0068-97 DEL 26-09-97 DE LA D.G.T.D. </p></div>
+          <div class="col-xs-4">
+          <p style="font-family:Helvetica;padding:2px;font-weight:400;font-size:11px!important;color:#000000"> <span style="color:#FF0000">•ORIGINAL CLIENTE</span>   CONTABILIDAD   ARCHIVO</p>
+          </div>
+          <div class="col-xs-3 mt0"><h4 style="float:right;color:#FF0000;font-weight:bolder; padding-right:5px;margin-top:0px">No. <span t-esc="o.number or ''"/></h4></div>
+        </div> 
+
+        <div class="boxsq1">
+          <span style="font-family:Helvetica;font-size:10px;text-align:justify;" t-if="o.type == 'out_invoice'">
+           Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
+           No se aceptan devoluciones de mercadería en descuento. Cambios de mercadería se aceptan únicamente dentro de los siguientes 7 días hábiles, en sus empaques originales con todas las etiquetas puestas y en buen estado. No se hacen devoluciones de dinero sino crédito de tienda únicamente. Al cancelar esta factura, el/la cliente(a) acepta expresamente las condiciones de la venta anteriormente descritas.
+           </span> 
+          <span t-if="o.type == 'out_refund'">Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.</span> 
+        </div>
+        <div class="rounded2" t-if="o.type == 'out_invoice'">
+          <p style="font-family:Helvetica;font-size:9px;text-align:justify;">Puede realizar transferencias o depósitos mediante las siguientes Cuentas Bancarias de AMECSA:</p>
+          <table width="100%;" class="table-condensed" cellpadding="0" cellspacing="0">
+            <tbody >
+              <tr>
+                  <td width="20%">
+                    <p style="font-family:Helvetica;font-size:9px;">
+                      <strong>BANCO NACIONAL COLONES</strong><br/>
+                       Cuenta: 100-01-000-202811-6<br/>
+                       CC: 15100010012028111
+                    </p>
+                    <p style="font-size:9px;"><strong>BANCO NACIONAL DÓLARES</strong><br/>
+                       Cuenta: 100-02-084-600103-5<br/>
+                       CC: 15108410026001034
+                    </p>
+                  </td>
+                  <td width="20%" style="border-left:1px solid #ddd;">
+                    <p style="font-family:Helvetica;font-size:9px;"><strong>BAC COLONES</strong><br/>
+                       Cuenta: 901113951<br/>
+                       CC: 10200009011139513
+                    </p>
+                    <p style="font-family:Helvetica;font-size:9px;"><strong>BAC DÓLARES</strong><br/>
+                       Cuenta: 906001599<br/>
+                       CC: 10200009060015990
+                    </p>
+                  </td>
+                  <td width="60%" style="border-left:1px solid #ddd;">
+                    <p style="font-family:Helvetica;font-size:10px;"><strong>Transferencias desde el extranjero</strong><br/>
+                       BANK OF AMERICA: MIAMI   |   Moneda: USD $ Dólares Americanos<br/>
+                       Crédito a traves de: BANK OF AMERICA: MIAMI    <br/>
+                       Cuenta: 19019-05932 (entre BAC San José y Bank of America)   |   No.ABA: 026090593  SWIFT BOFAUS3M<br/>
+                       Transferir a: BAC San José.(antes Banco San José, S.A.) | SWIFT:  BSNJCRSJ <br/> 
+                       Nombre de Beneficiario: AGENTES DE MERCADOTECNIA AMECSA, S.A. | Cuenta de Beneficiario: 906001599.
+                    </p>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          <p style="font-family:Helvetica;font-size:10px;"><strong>CONFIRMACIONES:</strong> Para enviar confirmaciones de depósito    Correo:   credito@amecsa-cr.com   |   Fax: (506) 2231-4271</p>
+        </div>
+    <style>
+
+      .tble-wrapper {
+        width: 100%;
+        padding: 2px;
+        -webkit-border-radius: 5px;
+        -o-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+      }
+      .tble-wrapper .tble {
+        width: 100%;
+      }
+      .tble-header {
+        height: 35px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        text-align: center;
+        line-height: 34px;
+        text-decoration: none;
+        font-weight: bold;
+        background:#666;
+        color:#fff;
+      }
+      .tble-row td {
+        font-size: 12px;
+        font-weight: normal;
+        color: #222;
+        height: 18px;
+        padding: 5px 2px 5px 2px;
+        border-left: 1px solid #666;
+      }
+      .tble tr th {
+        padding:2px 2px;
+      }
+      .br {
+        border-right: 1px solid #666;
+      }
+      .bl{
+        border-left: 1px solid #666;
+      }
+      .bt{
+        border-top: 1px solid #666;
+      }
+      .box{
+          border:1px solid #222 !important;
+          border-width : 1px 1px 1px 1px;
+          padding:2px 2px !important;
+          text-align:center;
+      }
+
+      .boxsq{
+          border:solid #333 !important;
+          border-width:1px 1px 1px 1px !important;
+      }
+
+      .boxsq2{
+          border:solid #333 !important;
+          border-width:1px 1px 0px 1px !important;
+      }
+      
+      .brl{
+          border-style: solid!important;
+          border-width: 0px 0px 0px 1px!important;
+      }
+      .bb{
+          border-style: solid!important;
+          border-width: 0px 0px 1px 0px!important;      
+      }
+      .rcorners2{
+          border-radius: 5px;
+          border: 1px solid #333;
+          padding:5px 5px 5px 5px;
+      }
+      .rounded1{
+          color:#fff;
+          border-radius: 8px;
+          border:none;
+          padding:5px 5px;
+          background: #222;
+      }
+      .rounded2{
+          border-radius: 8px;
+          border: 1px solid #ddd;
+          padding:5px 5px;
+      }
+      .total {
+          vertical-align:middle;
+          border:1px solid #333;
+          border-radius: 5px;
+      }
+      .title{
+        color:#222222;
+        font-size:16px;
+        font-weight:bolder;
+      }
+      .dtheader{
+        background-color:#666;
+        color:#ffffff;
+        border:none;
+        padding:5px 5px;
+      }
+      .dtcls{
+        color:#222;
+        width:33.33%;
+        padding:5px 5px;
+        border: 0.5px solid #222;
+      }
+      .dtbg{
+        margin:5px 5px; 
+        background-color:#fff;
+      }
+      .bg-title{
+        background-color:#dddddd;
+      }
+      .bg-img{ positiont:relative; background:url("web/static/src/img/logosFactura.jpg") bottom center;background-size: 70% 70%; background-repeat: no-repeat;}
+    </style>
+    </div>
+<!---  -->
+    <div class="header">
+        <table style="width:100%" class="mt32 mb35 table-condensed">
+          <tr>
+            <td width="80%">
+              <img  t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height:95px;"/>               
+            </td>
+            <td width="20%">
+              <div class="text-left">
+                  <h2><span style="color:#000;font-weight:bolder;font-size:22px" t-if="o.amount_total &gt;= 0 and not o.type == 'out_refund'">FACTURA</span>
+                    <span style="color:#FF0000;font-weight:bolder;font-size:20px" t-if="o.amount_total &lt; 0 or o.type == 'out_refund'">NOTA CRÉDITO</span><br/>
+                    <span style="color:#FF0000;font-weight:bolder;font-size:20px">No. <span style="color:red;" t-esc="o.number or '00001'"/></span>
+                  </h2>
+              </div>
+            </td>
+          </tr>
+        </table>
+    </div><!---//end header-->
+    <div class="page" style="height:190mm;width:100%"> 
+
+        <table style="width:100%;" class="mt35 mb30 table-condensed">
+          <tr>
+            <td width="80%">
+                <span class="title"><t t-esc="o.company_id.company_registry"/></span><br/>  
+                Cédula Jurídica <t t-esc="o.company_id.vat"/><br/>
+                <t t-if="o.company_id.street2" t-esc="o.company_id.street2"/><br/>
+                <span>Tel.</span> <t t-esc="o.company_id.phone"/> <span>Fax.</span> <t t-esc="o.company_id.fax"/><br/>
+                <span>Email:</span> <t t-esc="o.company_id.email"/><br/>
+                <t t-esc="o.company_id.website"/><br/><br/>                   
+            </td>
+            <td width="20%">
+              <div class="text-center">
+                <table style="width:90%;" class="dtheader rounded2">
+                  <tr>
+                    <td class="text-center">DÍA</td>
+                    <td class="text-center">MES</td>
+                    <td class="text-center">AÑO</td>
+                  </tr>
+                  <tr>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[8:10]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[5:7]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[0:4]) or ''"/></td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <table style="width:100%" class="mt30 mb30 table-condensed">
+          <tr >
+            <td width="80%">
+                <div t-if="o.partner_id.name" class="rcorners2">
+                    <table>
+                    <td width="60%">
+                    <strong>CLIENTE..:</strong> <span t-field="o.partner_id.name"/><br/>
+                    <strong>DIRECCIÓN:</strong> <span t-field="o.partner_id.street"/>
+                    </td>
+                    <td>
+                    <strong>TELÉFONO:</strong> <span t-field="o.partner_id.phone"/>
+                    </td>
+                    </table> 
+                </div>
+            </td>
+            <td width="20%">
+                <div t-if="o.partner_id.ref" class="rcorners2">
+                    <div class="text-center">
+                      <strong>CÓDIGO CLIENTE</strong><br/>
+                      <span t-field="o.partner_id.ref"/>
+                    </div>
+                </div>
+            </td>
+          </tr>
+        </table>
+        <table style="width:100%" class="mt30 mb30 table-condensed">
+          <tr>
+            <td>
+              <div t-if="o.origin" class="rcorners2">
+                <div class="text-center">
+                  <t  t-if="o.name"><strong>ORDEN DE COMPRA:</strong> <span t-field="o.name"/></t>     <t   t-if="o.origin"><strong>#PEDIDO:</strong> <span t-field="o.origin"/></t>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div t-if="o.user_id.name" class="rcorners2">
+                  <div class="text-center">
+                    <strong>VENDEDOR:</strong> <span t-field="o.user_id.name"/>
+                  </div>
+              </div>
+            </td>
+            <td colspan="2">
+              <div t-if="o.payment_term" class="rcorners2">
+                  <div class="text-center">
+                    <strong>CONDICIONES DE PAGO:</strong> <span t-esc="o.payment_term and o.payment_term.name or 'CONTADO'"/>
+                  </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="tble-wrapper">
+          <div class="content mt10 bg-img">
+            <table cellspacing="0" style="height:65%;width:100%;" class="tble">
+              <thead class="tble-header">
+                <tr>
+                  <th style="width:12%;" class="tble-header text-center">COD.ART.</th>
+                  <th style="width:8%" class="tble-header text-center">CANT.</th>
+                  <th style="width:5%" class="tble-header text-center">U.D.M</th>
+                  <th style="width:40%" class="tble-header text-center">DESCRIPCION</th>
+                  <th style="width:5%" class="tble-header text-center">%DESC.</th>
+                  <th style="width:12%" class="tble-header text-center">PREC.UNIT.</th>
+                  <th style="width:15%" class="tble-header text-center">SUBTOTAL</th>
+                  <th style="width:3%" class="tble-header text-center">I.V.</th>
+                </tr>
+              </thead>
+              <tbody class="invoice_tbody">
+                <tr class="tble-row" t-foreach="o.invoice_line" t-as="l">
+                  <td style="width:12%" class="text-center"><span t-field="l.product_id.default_code"/></td>
+                  <td style="width:8%" class="text-center"><span t-field="l.quantity"/></td>
+                  <td style="width:5%" class="text-center"><span t-field="l.uos_id.name"/></td>
+                  <td style="width:40%" class="text-left"><span t-field="l.name"/></td>
+                  <td style="width:5%" class="text-right"><span t-field="l.discount"/></td>
+                  <td style="width:12%" class="text-right"><span t-field="l.price_unit"/></td>
+                  <td style="width:12%" class="text-right"><span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                  <td style="width:2%" class="br text-center"><span t-if="l.invoice_line_tax_id">S</span></td>
+                </tr>
+                <tr class="bl br bt">
+                  <td colspan="8" class="text-center">
+                   ********** Ultima Línea **********
+                  </td>
+                </tr>
+                <t t-if="o.comment" class="text-center" style="font-size:10.0px">
+                <tr class="bl br">
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td colspan="2" class="tr-cls text-left">
+                    NOTAS:<span t-field="o.comment"/>
+                  </td>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                </tr>
+                </t>
+                <tr class="bl br">
+                  <td colspan="8"/>
+                </tr>
+              </tbody>
+            </table>          
+          </div>
+          <!--Tabla Totales-->
+          <table width="100%;" class="tble boxsq" cellpadding="0" cellspacing="0">
+            <tbody >
+              <tr>
+                <th style="width:28%" class="text-left">
+                  <p style="font-family:Helvetica;padding:2px;font-weight:bolder;font-size:9px!important;text-align:justify;">PRECIOS FACTURADOS Y PAGADEROS EN LA MISMA MONEDA. ESTA FACTURA DEVENGARA INTERESES DEL 3% MENSUAL DESPUES DE VENCIDA, EL DEUDOR REUNCIA SU DOMICILIO Y LOS REQUERIMIENTOS DE PAGO Y TRAMITES DE JUCIO Y DA POR ACEPTADAS LAS CONDICIONES DEL CODIGO DE COMERCIO SEGUN EL ARTICULO 460. NO SE ACEPTAN DEVOLUCIONES DESPUES DE 24 HORAS DE ENTREGADO.
+                  </p>
+                </th>
+                <th style="width:40%" class="bl text-left">
+                  <div style="padding:2px 2px;">
+                      <p><br/>Nombre:_____________________________.<br/><br/>
+                        No.Cédula:__________________________.<br/><br/>
+                        Firma:__________________________.</p> 
+                  </div>
+                </th>
+                <th style="width:15%" class="bl text-right">
+                  <div style="padding:2px 2px;">
+                    <span>SUBTOTAL</span><br/>
+                    <span>I.V.</span><br/>
+                    <span>DESCUENTO</span><br/>
+                    <span><strong>T O T A L</strong></span>
+                  </div>
+                </th>
+                <th style="width:15%" class="text-right">
+                  <div style="padding:2px 0px;">
+                            <span t-field="o.amount_untaxed_not_discounted" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/><br/>
+                            <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/><br/>
+                            <span t-field="o.currency_id.symbol" /><t t-esc="'{0:,.2f}'.format(int(sum([ (line.quantity*line.price_unit-line.price_subtotal) for line in o.invoice_line ])))" /><br/>
+                            <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                  </div>
+                </th>
+                <th style="width:2%" class="text-center"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--End tbl-wrapped-->
+        <div class="row">
+          <div class="col-xs-5"><p style="font-family:Helvetica;padding:2px 2px 2px 2px;font-weight:bolder;font-size:9px!important">AUTORIZADO MEDIANTE OFICIO No.01-0068-97 DEL 26-09-97 DE LA D.G.T.D. </p></div>
+          <div class="col-xs-4">
+          <p style="font-family:Helvetica;padding:2px;font-weight:400;font-size:11px!important;color:#000000"> ORIGINAL CLIENTE   <span style="color:#FF0000">•CONTABILIDAD</span>   ARCHIVO</p>
+          </div>
+          <div class="col-xs-3 mt0"><h4 style="float:right;color:#FF0000;font-weight:bolder; padding-right:5px;margin-top:0px">No. <span t-esc="o.number or ''"/></h4></div>
+        </div> 
+
+        <div class="boxsq1">
+          <span style="font-family:Helvetica;font-size:10px;text-align:justify;" t-if="o.type == 'out_invoice'">
+           Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
+           No se aceptan devoluciones de mercadería en descuento. Cambios de mercadería se aceptan únicamente dentro de los siguientes 7 días hábiles, en sus empaques originales con todas las etiquetas puestas y en buen estado. No se hacen devoluciones de dinero sino crédito de tienda únicamente. Al cancelar esta factura, el/la cliente(a) acepta expresamente las condiciones de la venta anteriormente descritas.
+           </span> 
+          <span t-if="o.type == 'out_refund'">Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.</span> 
+        </div>
+        <div class="rounded2" t-if="o.type == 'out_invoice'">
+          <p style="font-family:Helvetica;font-size:9px;text-align:justify;">Puede realizar transferencias o depósitos mediante las siguientes Cuentas Bancarias de AMECSA:</p>
+          <table width="100%;" class="table-condensed" cellpadding="0" cellspacing="0">
+            <tbody >
+              <tr>
+                  <td width="20%">
+                    <p style="font-family:Helvetica;font-size:9px;">
+                      <strong>BANCO NACIONAL COLONES</strong><br/>
+                       Cuenta: 100-01-000-202811-6<br/>
+                       CC: 15100010012028111
+                    </p>
+                    <p style="font-size:9px;"><strong>BANCO NACIONAL DÓLARES</strong><br/>
+                       Cuenta: 100-02-084-600103-5<br/>
+                       CC: 15108410026001034
+                    </p>
+                  </td>
+                  <td width="20%" style="border-left:1px solid #ddd;">
+                    <p style="font-family:Helvetica;font-size:9px;"><strong>BAC COLONES</strong><br/>
+                       Cuenta: 901113951<br/>
+                       CC: 10200009011139513
+                    </p>
+                    <p style="font-family:Helvetica;font-size:9px;"><strong>BAC DÓLARES</strong><br/>
+                       Cuenta: 906001599<br/>
+                       CC: 10200009060015990
+                    </p>
+                  </td>
+                  <td width="60%" style="border-left:1px solid #ddd;">
+                    <p style="font-family:Helvetica;font-size:10px;"><strong>Transferencias desde el extranjero</strong><br/>
+                       BANK OF AMERICA: MIAMI   |   Moneda: USD $ Dólares Americanos<br/>
+                       Crédito a traves de: BANK OF AMERICA: MIAMI    <br/>
+                       Cuenta: 19019-05932 (entre BAC San José y Bank of America)   |   No.ABA: 026090593  SWIFT BOFAUS3M<br/>
+                       Transferir a: BAC San José.(antes Banco San José, S.A.) | SWIFT:  BSNJCRSJ <br/> 
+                       Nombre de Beneficiario: AGENTES DE MERCADOTECNIA AMECSA, S.A. | Cuenta de Beneficiario: 906001599.
+                    </p>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          <p style="font-family:Helvetica;font-size:10px;"><strong>CONFIRMACIONES:</strong> Para enviar confirmaciones de depósito    Correo:   credito@amecsa-cr.com   |   Fax: (506) 2231-4271</p>
+        </div>
+    <style>
+
+      .tble-wrapper {
+        width: 100%;
+        padding: 2px;
+        -webkit-border-radius: 5px;
+        -o-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+      }
+      .tble-wrapper .tble {
+        width: 100%;
+      }
+      .tble-header {
+        height: 35px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        text-align: center;
+        line-height: 34px;
+        text-decoration: none;
+        font-weight: bold;
+        background:#666;
+        color:#fff;
+      }
+      .tble-row td {
+        font-size: 12px;
+        font-weight: normal;
+        color: #222;
+        height: 18px;
+        padding: 5px 2px 5px 2px;
+        border-left: 1px solid #666;
+      }
+      .tble tr th {
+        padding:2px 2px;
+      }
+      .br {
+        border-right: 1px solid #666;
+      }
+      .bl{
+        border-left: 1px solid #666;
+      }
+      .bt{
+        border-top: 1px solid #666;
+      }
+      .box{
+          border:1px solid #222 !important;
+          border-width : 1px 1px 1px 1px;
+          padding:2px 2px !important;
+          text-align:center;
+      }
+
+      .boxsq{
+          border:solid #333 !important;
+          border-width:1px 1px 1px 1px !important;
+      }
+
+      .boxsq2{
+          border:solid #333 !important;
+          border-width:1px 1px 0px 1px !important;
+      }
+      
+      .brl{
+          border-style: solid!important;
+          border-width: 0px 0px 0px 1px!important;
+      }
+      .bb{
+          border-style: solid!important;
+          border-width: 0px 0px 1px 0px!important;      
+      }
+      .rcorners2{
+          border-radius: 5px;
+          border: 1px solid #333;
+          padding:5px 5px 5px 5px;
+      }
+      .rounded1{
+          color:#fff;
+          border-radius: 8px;
+          border:none;
+          padding:5px 5px;
+          background: #222;
+      }
+      .rounded2{
+          border-radius: 8px;
+          border: 1px solid #ddd;
+          padding:5px 5px;
+      }
+      .total {
+          vertical-align:middle;
+          border:1px solid #333;
+          border-radius: 5px;
+      }
+      .title{
+        color:#222222;
+        font-size:16px;
+        font-weight:bolder;
+      }
+      .dtheader{
+        background-color:#666;
+        color:#ffffff;
+        border:none;
+        padding:5px 5px;
+      }
+      .dtcls{
+        color:#222;
+        width:33.33%;
+        padding:5px 5px;
+        border: 0.5px solid #222;
+      }
+      .dtbg{
+        margin:5px 5px; 
+        background-color:#fff;
+      }
+      .bg-title{
+        background-color:#dddddd;
+      }
+      .bg-img{ positiont:relative; background:url("web/static/src/img/logosFactura.jpg") bottom center;background-size: 70% 70%; background-repeat: no-repeat;}
+    </style>
+    </div>
+
+    <div class="header">
+        <table style="width:100%" class="mt32 mb35 table-condensed">
+          <tr>
+            <td width="80%">
+              <img  t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height:95px;"/>               
+            </td>
+            <td width="20%">
+              <div class="text-left">
+                  <h2><span style="color:#000;font-weight:bolder;font-size:22px" t-if="o.amount_total &gt;= 0 and not o.type == 'out_refund'">FACTURA</span>
+                    <span style="color:#FF0000;font-weight:bolder;font-size:20px" t-if="o.amount_total &lt; 0 or o.type == 'out_refund'">NOTA CRÉDITO</span><br/>
+                    <span style="color:#FF0000;font-weight:bolder;font-size:20px">No. <span style="color:red;" t-esc="o.number or '00001'"/></span>
+                  </h2>
+              </div>
+            </td>
+          </tr>
+        </table>
+    </div><!---//end header-->
+    <div class="page" style="height:190mm;width:100%"> 
+
+        <table style="width:100%;" class="mt35 mb30 table-condensed">
+          <tr>
+            <td width="80%">
+                <span class="title"><t t-esc="o.company_id.company_registry"/></span><br/>  
+                Cédula Jurídica <t t-esc="o.company_id.vat"/><br/>
+                <t t-if="o.company_id.street2" t-esc="o.company_id.street2"/><br/>
+                <span>Tel.</span> <t t-esc="o.company_id.phone"/> <span>Fax.</span> <t t-esc="o.company_id.fax"/><br/>
+                <span>Email:</span> <t t-esc="o.company_id.email"/><br/>
+                <t t-esc="o.company_id.website"/><br/><br/>                   
+            </td>
+            <td width="20%">
+              <div class="text-center">
+                <table style="width:90%;" class="dtheader rounded2">
+                  <tr>
+                    <td class="text-center">DÍA</td>
+                    <td class="text-center">MES</td>
+                    <td class="text-center">AÑO</td>
+                  </tr>
+                  <tr>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[8:10]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[5:7]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[0:4]) or ''"/></td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <table style="width:100%" class="mt30 mb30 table-condensed">
+          <tr >
+            <td width="80%">
+                <div t-if="o.partner_id.name" class="rcorners2">
+                    <table>
+                    <td width="60%">
+                    <strong>CLIENTE..:</strong> <span t-field="o.partner_id.name"/><br/>
+                    <strong>DIRECCIÓN:</strong> <span t-field="o.partner_id.street"/>
+                    </td>
+                    <td>
+                    <strong>TELÉFONO:</strong> <span t-field="o.partner_id.phone"/>
+                    </td>
+                    </table> 
+                </div>
+            </td>
+            <td width="20%">
+                <div t-if="o.partner_id.ref" class="rcorners2">
+                    <div class="text-center">
+                      <strong>CÓDIGO CLIENTE</strong><br/>
+                      <span t-field="o.partner_id.ref"/>
+                    </div>
+                </div>
+            </td>
+          </tr>
+        </table>
+        <table style="width:100%" class="mt30 mb30 table-condensed">
+          <tr>
+            <td>
+              <div t-if="o.origin" class="rcorners2">
+                <div class="text-center">
+                  <t  t-if="o.name"><strong>ORDEN DE COMPRA:</strong> <span t-field="o.name"/></t>     <t   t-if="o.origin"><strong>#PEDIDO:</strong> <span t-field="o.origin"/></t>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div t-if="o.user_id.name" class="rcorners2">
+                  <div class="text-center">
+                    <strong>VENDEDOR:</strong> <span t-field="o.user_id.name"/>
+                  </div>
+              </div>
+            </td>
+            <td colspan="2">
+              <div t-if="o.payment_term" class="rcorners2">
+                  <div class="text-center">
+                    <strong>CONDICIONES DE PAGO:</strong> <span t-esc="o.payment_term and o.payment_term.name or 'CONTADO'"/>
+                  </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="tble-wrapper">
+          <div class="content mt10 bg-img">
+            <table cellspacing="0" style="height:65%;width:100%;" class="tble">
+              <thead class="tble-header">
+                <tr>
+                  <th style="width:12%;" class="tble-header text-center">COD.ART.</th>
+                  <th style="width:8%" class="tble-header text-center">CANT.</th>
+                  <th style="width:5%" class="tble-header text-center">U.D.M</th>
+                  <th style="width:40%" class="tble-header text-center">DESCRIPCION</th>
+                  <th style="width:5%" class="tble-header text-center">%DESC.</th>
+                  <th style="width:12%" class="tble-header text-center">PREC.UNIT.</th>
+                  <th style="width:15%" class="tble-header text-center">SUBTOTAL</th>
+                  <th style="width:3%" class="tble-header text-center">I.V.</th>
+                </tr>
+              </thead>
+              <tbody class="invoice_tbody">
+                <tr class="tble-row" t-foreach="o.invoice_line" t-as="l">
+                  <td style="width:12%" class="text-center"><span t-field="l.product_id.default_code"/></td>
+                  <td style="width:8%" class="text-center"><span t-field="l.quantity"/></td>
+                  <td style="width:5%" class="text-center"><span t-field="l.uos_id.name"/></td>
+                  <td style="width:40%" class="text-left"><span t-field="l.name"/></td>
+                  <td style="width:5%" class="text-right"><span t-field="l.discount"/></td>
+                  <td style="width:12%" class="text-right"><span t-field="l.price_unit"/></td>
+                  <td style="width:12%" class="text-right"><span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                  <td style="width:2%" class="br text-center"><span t-if="l.invoice_line_tax_id">S</span></td>
+                </tr>
+                <tr class="bl br bt">
+                  <td colspan="8" class="text-center">
+                   ********** Ultima Línea **********
+                  </td>
+                </tr>
+                <t t-if="o.comment" class="text-center" style="font-size:10.0px">
+                <tr class="bl br">
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td colspan="2" class="tr-cls text-left">
+                    NOTAS:<span t-field="o.comment"/>
+                  </td>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                  <td class="text-center"/>
+                </tr>
+                </t>
+                <tr class="bl br">
+                  <td colspan="8"/>
+                </tr>
+              </tbody>
+            </table>          
+          </div>
+          <!--Tabla Totales-->
+          <table width="100%;" class="tble boxsq" cellpadding="0" cellspacing="0">
+            <tbody >
+              <tr>
+                <th style="width:28%" class="text-left">
+                  <p style="font-family:Helvetica;padding:2px;font-weight:bolder;font-size:9px!important;text-align:justify;">PRECIOS FACTURADOS Y PAGADEROS EN LA MISMA MONEDA. ESTA FACTURA DEVENGARA INTERESES DEL 3% MENSUAL DESPUES DE VENCIDA, EL DEUDOR REUNCIA SU DOMICILIO Y LOS REQUERIMIENTOS DE PAGO Y TRAMITES DE JUCIO Y DA POR ACEPTADAS LAS CONDICIONES DEL CODIGO DE COMERCIO SEGUN EL ARTICULO 460. NO SE ACEPTAN DEVOLUCIONES DESPUES DE 24 HORAS DE ENTREGADO.
+                  </p>
+                </th>
+                <th style="width:40%" class="bl text-left">
+                  <div style="padding:2px 2px;">
+                      <p><br/>Nombre:_____________________________.<br/><br/>
+                        No.Cédula:__________________________.<br/><br/>
+                        Firma:__________________________.</p> 
+                  </div>
+                </th>
+                <th style="width:15%" class="bl text-right">
+                  <div style="padding:2px 2px;">
+                    <span>SUBTOTAL</span><br/>
+                    <span>I.V.</span><br/>
+                    <span>DESCUENTO</span><br/>
+                    <span><strong>T O T A L</strong></span>
+                  </div>
+                </th>
+                <th style="width:15%" class="text-right">
+                  <div style="padding:2px 0px;">
+                            <span t-field="o.amount_untaxed_not_discounted" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/><br/>
+                            <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/><br/>
+                            <span t-field="o.currency_id.symbol" /><t t-esc="'{0:,.2f}'.format(int(sum([ (line.quantity*line.price_unit-line.price_subtotal) for line in o.invoice_line ])))" /><br/>
+                            <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                  </div>
+                </th>
+                <th style="width:2%" class="text-center"></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--End tbl-wrapped-->
+        <div class="row">
+          <div class="col-xs-5"><p style="font-family:Helvetica;padding:2px 2px 2px 2px;font-weight:bolder;font-size:9px!important">AUTORIZADO MEDIANTE OFICIO No.01-0068-97 DEL 26-09-97 DE LA D.G.T.D. </p></div>
+          <div class="col-xs-4">
+          <p style="font-family:Helvetica;padding:2px;font-weight:400;font-size:11px!important;color:#000000"> ORIGINAL CLIENTE   CONTABILIDAD   <span style="color:#FF0000">•ARCHIVO</span></p>
+          </div>
+          <div class="col-xs-3 mt0"><h4 style="float:right;color:#FF0000;font-weight:bolder; padding-right:5px;margin-top:0px">No. <span t-esc="o.number or ''"/></h4></div>
+        </div> 
+
+        <div class="boxsq1">
+          <span style="font-family:Helvetica;font-size:10px;text-align:justify;" t-if="o.type == 'out_invoice'">
+           Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
+           No se aceptan devoluciones de mercadería en descuento. Cambios de mercadería se aceptan únicamente dentro de los siguientes 7 días hábiles, en sus empaques originales con todas las etiquetas puestas y en buen estado. No se hacen devoluciones de dinero sino crédito de tienda únicamente. Al cancelar esta factura, el/la cliente(a) acepta expresamente las condiciones de la venta anteriormente descritas.
+           </span> 
+          <span t-if="o.type == 'out_refund'">Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.</span> 
+        </div>
+        <div class="rounded2" t-if="o.type == 'out_invoice'">
+          <p style="font-family:Helvetica;font-size:9px;text-align:justify;">Puede realizar transferencias o depósitos mediante las siguientes Cuentas Bancarias de AMECSA:</p>
+          <table width="100%;" class="table-condensed" cellpadding="0" cellspacing="0">
+            <tbody >
+              <tr>
+                  <td width="20%">
+                    <p style="font-family:Helvetica;font-size:9px;">
+                      <strong>BANCO NACIONAL COLONES</strong><br/>
+                       Cuenta: 100-01-000-202811-6<br/>
+                       CC: 15100010012028111
+                    </p>
+                    <p style="font-size:9px;"><strong>BANCO NACIONAL DÓLARES</strong><br/>
+                       Cuenta: 100-02-084-600103-5<br/>
+                       CC: 15108410026001034
+                    </p>
+                  </td>
+                  <td width="20%" style="border-left:1px solid #ddd;">
+                    <p style="font-family:Helvetica;font-size:9px;"><strong>BAC COLONES</strong><br/>
+                       Cuenta: 901113951<br/>
+                       CC: 10200009011139513
+                    </p>
+                    <p style="font-family:Helvetica;font-size:9px;"><strong>BAC DÓLARES</strong><br/>
+                       Cuenta: 906001599<br/>
+                       CC: 10200009060015990
+                    </p>
+                  </td>
+                  <td width="60%" style="border-left:1px solid #ddd;">
+                    <p style="font-family:Helvetica;font-size:10px;"><strong>Transferencias desde el extranjero</strong><br/>
+                       BANK OF AMERICA: MIAMI   |   Moneda: USD $ Dólares Americanos<br/>
+                       Crédito a traves de: BANK OF AMERICA: MIAMI    <br/>
+                       Cuenta: 19019-05932 (entre BAC San José y Bank of America)   |   No.ABA: 026090593  SWIFT BOFAUS3M<br/>
+                       Transferir a: BAC San José.(antes Banco San José, S.A.) | SWIFT:  BSNJCRSJ <br/> 
+                       Nombre de Beneficiario: AGENTES DE MERCADOTECNIA AMECSA, S.A. | Cuenta de Beneficiario: 906001599.
+                    </p>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          <p style="font-family:Helvetica;font-size:10px;"><strong>CONFIRMACIONES:</strong> Para enviar confirmaciones de depósito    Correo:   credito@amecsa-cr.com   |   Fax: (506) 2231-4271</p>
+        </div>
+    <style>
+
+      .tble-wrapper {
+        width: 100%;
+        padding: 2px;
+        -webkit-border-radius: 5px;
+        -o-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+      }
+      .tble-wrapper .tble {
+        width: 100%;
+      }
+      .tble-header {
+        height: 35px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        text-align: center;
+        line-height: 34px;
+        text-decoration: none;
+        font-weight: bold;
+        background:#666;
+        color:#fff;
+      }
+      .tble-row td {
+        font-size: 12px;
+        font-weight: normal;
+        color: #222;
+        height: 18px;
+        padding: 5px 2px 5px 2px;
+        border-left: 1px solid #666;
+      }
+      .tble tr th {
+        padding:2px 2px;
+      }
+      .br {
+        border-right: 1px solid #666;
+      }
+      .bl{
+        border-left: 1px solid #666;
+      }
+      .bt{
+        border-top: 1px solid #666;
+      }
+      .box{
+          border:1px solid #222 !important;
+          border-width : 1px 1px 1px 1px;
+          padding:2px 2px !important;
+          text-align:center;
+      }
+
+      .boxsq{
+          border:solid #333 !important;
+          border-width:1px 1px 1px 1px !important;
+      }
+
+      .boxsq2{
+          border:solid #333 !important;
+          border-width:1px 1px 0px 1px !important;
+      }
+      
+      .brl{
+          border-style: solid!important;
+          border-width: 0px 0px 0px 1px!important;
+      }
+      .bb{
+          border-style: solid!important;
+          border-width: 0px 0px 1px 0px!important;      
+      }
+      .rcorners2{
+          border-radius: 5px;
+          border: 1px solid #333;
+          padding:5px 5px 5px 5px;
+      }
+      .rounded1{
+          color:#fff;
+          border-radius: 8px;
+          border:none;
+          padding:5px 5px;
+          background: #222;
+      }
+      .rounded2{
+          border-radius: 8px;
+          border: 1px solid #ddd;
+          padding:5px 5px;
+      }
+      .total {
+          vertical-align:middle;
+          border:1px solid #333;
+          border-radius: 5px;
+      }
+      .title{
+        color:#222222;
+        font-size:16px;
+        font-weight:bolder;
+      }
+      .dtheader{
+        background-color:#666;
+        color:#ffffff;
+        border:none;
+        padding:5px 5px;
+      }
+      .dtcls{
+        color:#222;
+        width:33.33%;
+        padding:5px 5px;
+        border: 0.5px solid #222;
+      }
+      .dtbg{
+        margin:5px 5px; 
+        background-color:#fff;
+      }
+      .bg-title{
+        background-color:#dddddd;
+      }
+      .bg-img{ positiont:relative; background:url("web/static/src/img/logosFactura.jpg") bottom center;background-size: 70% 70%; background-repeat: no-repeat;}
+    </style>
+    </div>
+        </template>
+    </data>
+</openerp>
