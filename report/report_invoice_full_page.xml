@@ -245,7 +245,7 @@
                                 </th>
                                 <th style="width:15%" class="text-right">
                                     <div style="padding:2px 0px;">
-                                        <span t-if="o.amount_untaxed_not_discounted or 0" t-field="o.amount_untaxed_not_discounted" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        <span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                         <br/>
                                         <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                         <br/>
