@@ -83,7 +83,7 @@
                                 <strong>CLIENTE..:</strong>
                                 <span t-field="o.partner_id.name"/>
                                 <br/>
-                                <strong>IDENTIFICACIóN:</strong>
+                                <strong>IDENTIFICACIÓN:</strong>
                                 <span t-field="o.partner_id.ref"/>
                             </td>
                             <td width="50%">
