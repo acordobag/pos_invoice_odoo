@@ -31,6 +31,9 @@ Modulo de reporte de factura para pos, mas un comprobante adicional.
  'website': 'http://www.camptocamp.com',
  'license': 'AGPL-3',
  'depends': ['base', 'account'],
+ 'external_dependencies': {
+        'python' : ['num2words'],
+},
  'data': [
         'views/account_invoice_form_inherited.xml',
         'views/res_partner_form_inherited.xml',
