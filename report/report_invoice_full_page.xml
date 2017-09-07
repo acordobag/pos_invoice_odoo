@@ -143,10 +143,10 @@
                                     <td style="width:12%" class="text-right">
                                         <span t-field="l.price_unit"/>
                                     </td>
-                                    <td style="width:4%" class="br text-center">
+                                    <td style="width:4%" class="text-center">
                                         <span t-if="l.invoice_line_tax_id">S</span>
                                     </td>
-                                    <td style="width:12%" class="text-right">
+                                    <td style="width:12%" class="br text-right">
                                         <span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                     </td>
                                 </tr>
