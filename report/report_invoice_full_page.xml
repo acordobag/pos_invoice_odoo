@@ -214,7 +214,7 @@
                                 <th style="width:65%">
                                 </th>
                                 <th style="width:35%">
-                                    <span t-field="l.total_amount_text"/>
+                                    <span t-field="o.total_amount_text"/>
                                 </th>
                             </tr>
                         </tbody>
