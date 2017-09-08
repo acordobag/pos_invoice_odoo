@@ -212,11 +212,11 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table width="100%;" class="tble boxsq">
+                    <table width="100%;" class="tble boxsq3">
                         <tr>
                             <th style="width:65%"></th>
                             <th style="width:35%" class="bl text-right">
-                                <p style="font-family:Helvetica;font-size:11px;" t-field="o.total_amount_text"></p>
+                                <p style="font-family:Helvetica;font-size:12px;font-weight: normal;" t-field="o.total_amount_text"></p>
                             </th>
                         </tr>
                     </table>
@@ -319,6 +319,10 @@
       .boxsq2{
           border:solid #333 !important;
           border-width:1px 1px 0px 1px !important;
+      }
+      .boxsq3{
+          border:solid #333 !important;
+          border-width:0px 1px 1px 1px !important;
       }
             .brl{
           border-style: solid!important;
