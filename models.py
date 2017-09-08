@@ -12,5 +12,5 @@ class invoice_extend(models.Model):
 
     @api.depends('amount_total')
     def _amount_total_to_text(self):
-        self.total_amount_text= num2words(self.amount_total, lang='es')
+        self.total_amount_text= num2words(int(self.amount_total), lang='es')
 
