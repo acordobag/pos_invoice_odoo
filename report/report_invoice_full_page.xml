@@ -215,8 +215,8 @@
                     <table width="100%;" class="tble boxsqtotal2">
                         <tr>
                             <th style="width:65%"></th>
-                            <th style="width:35%" class="text-right">
-                                <span style="font-family:Helvetica;font-size:10px;" t-field="o.total_amount_text"/>
+                            <th style="width:35%" class="bl text-right">
+                                <p style="font-family:Helvetica;font-size:11px;" t-field="o.total_amount_text"></p>
                             </th>
                         </tr>
                     </table>
