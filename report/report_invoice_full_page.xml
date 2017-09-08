@@ -177,7 +177,7 @@
                         </table>
                     </div>
                     <!--Tabla Totales-->
-                    <table width="100%;" class="tble boxsqtotal" cellpadding="0" cellspacing="0">
+                    <table width="100%;" class="tble boxsq" cellpadding="0" cellspacing="0">
                         <tbody >
                             <tr>
                                 <th style="width:65%" class="text-left">
@@ -212,7 +212,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table width="100%;" class="tble boxsqtotal2">
+                    <table width="100%;" class="tble boxsq2">
                         <tr>
                             <th style="width:65%"></th>
                             <th style="width:35%" class="bl text-right">
@@ -316,17 +316,6 @@
           border:solid #333 !important;
           border-width:1px 1px 1px 1px !important;
       }
-
-      .boxsqtotal{
-          border:solid #333 !important;
-          border-width:1px 1px 1px 0px !important;
-      }
-
-      .boxsqtotal2{
-          border:solid #333 !important;
-          border-width:0px 1px 1px 1px !important;
-      }
-
       .boxsq2{
           border:solid #333 !important;
           border-width:1px 1px 0px 1px !important;
